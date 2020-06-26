@@ -1,0 +1,96 @@
+---
+title: "Exam 2"
+author: "Divya Koothan"
+date: "6/26/2020"
+output: word_document
+toc: TRUE
+---
+
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+3. The dataset is a cross-section data set, because it shows a snapshot in time for the year 2015. 
+
+
+
+
+
+
+```{r, include=FALSE}
+library(rio)
+ps2020 <- import ("fatal-police-shootings-data.csv")
+ps2020overview <- ps2020
+ps2020gender <- ps2020overview
+
+```
+
+Exam Practice Numbers 
+```{r}
+2+2
+#this is math 
+```
+
+let us see how this prints 
+```{r}
+for(r in 1:nrow(ps2020gender)){
+  if (ps2020gender$gender[r] == "M"){
+    ps2020gender$gender[r] = "Male"
+  } else if (ps2020gender$gender[r]=="F"){
+    ps2020gender$gender[r] = "Female"
+  } else if (ps2020gender$gender[r] == ''){
+    ps2020gender$gender[r] = "Other/Unknown"
+  }
+}
+
+str(ps2020)
+```
+
+printing to see how a for loop goes
+```{r, echo = FALSE, comment=""}
+mat <-matrix(data =seq(1, 10, by=1),
+             nrow = 5, ncol =2)
+print(mat)
+
+for(r in 1:nrow(mat)) # for r in 1:5
+  for(c in 1:ncol(mat))# for c in 1:2
+    print(paste("Row", r, "and column",c, "have values of", mat[r,c]))
+
+```
+
+```{r, comment=""}
+2+2
+#hey
+# comment!
+```
+
+
+Seeing How the Numbers Go
+```{r}
+#mean()
+#let us see
+```
+Just one comment
+```{r}
+#does this come up
+```
+
+## R Markdown
+
+This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+
+When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
+
+```{r cars}
+summary(cars)
+```
+
+## Including Plots
+
+You can also embed plots, for example:
+
+```{r pressure, echo=FALSE}
+plot(pressure)
+```
+
+Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
