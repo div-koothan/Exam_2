@@ -103,5 +103,25 @@ data_greater_30 <-
 #find count of cournty with "ai"
 length(grep("ai", data_greater_30$country))
 
+#taking the sum of inequality-gini
+sapply(data_greater_30$inequality_gini, sum)
+#this would be the acutal sum 
+sum(data_greater_30$inequality_gini)
 
 
+#labelling the variables 
+#load labelled
+library(labelled)
+var_label(merged_df) <- list(`iso2c` = "iso2c",
+                             `country` = "country",
+                             `inequality_gini` = "inequality Gini Index",
+                             `year` = "year",
+                             `low_inequality` = "below average inequality gini",
+                             `high_inequality` = "abover average inequality gini",
+                             `female_enrollment` = "% of femaled enrolled in primary education")
+
+
+
+#save the data fram as a stata dataset
+library(rio)
+export(merged_df, "final_data.dta")

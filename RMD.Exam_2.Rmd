@@ -171,34 +171,36 @@ length(grep("ai", data_greater_30$country))
 ```
 
 
-
-
-
-
-
-
-
-```{r, comment=""}
-2+2
-#hey
-# comment!
+```{r}
+21. #taking the sum of inequality-gini
+sapply(data_greater_30$inequality_gini, sum)
+#this would be the acutal sum 
+sum(data_greater_30$inequality_gini)
 ```
 
 
-This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
-
-When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
-
-```{r cars}
-summary(cars)
+```{r}
+22. #labelling the variables 
+#load labelled
+library(labelled)
+var_label(merged_df) <- list(`iso2c` = "iso2c",
+                             `country` = "country",
+                             `inequality_gini` = "inequality Gini Index",
+                             `year` = "year",
+                             `low_inequality` = "below average inequality gini",
+                             `high_inequality` = "abover average inequality gini",
+                             `female_enrollment` = "% of femaled enrolled in primary education")
 ```
 
-## Including Plots
 
-You can also embed plots, for example:
-
-```{r pressure, echo=FALSE}
-plot(pressure)
+```{r}
+23. #save the data fram as a stata dataset
+library(rio)
+export(merged_df, "final_data.dta")
 ```
 
-Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
+
+```{r}
+24. #GitHub repo link 
+```
+
