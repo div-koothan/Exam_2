@@ -3,7 +3,6 @@ title: "Exam 2"
 author: "Divya Koothan"
 date: "6/26/2020"
 output: word_document
-toc: TRUE
 ---
 
 ```{r setup, include = FALSE}
@@ -124,7 +123,7 @@ for (i in reduce_inequality_africa){
 15.#load the WDI
 library(WDI)
 #importing data
-education_pupil <- WDI(country = "all",
+female_edu <- WDI(country = "all",
                   indicator =c ("SE.PRM.ENRL.FE.ZS"),
                   start = 2015, end = 2015, extra = FALSE, cache = NULL)
 ```
@@ -200,7 +199,8 @@ export(merged_df, "final_data.dta")
 ```
 
 
-```{r}
+
 24. #GitHub repo link 
-```
+[link to Git Hub] (https://github.com/div-koothan/Exam_2)
+
 
