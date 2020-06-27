@@ -9,54 +9,83 @@ toc: TRUE
 ```{r setup, include = FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 ```
+```{r}
+1. #clear global environment 
+rm(list = ls(all = TRUE))
+```
+
+
+```{r}
+2. #loading rio library to import ineqaulity excel sheet
+library(rio)
+inequality_data <- import("inequality.xlsx")
+```
+
 
 3. The dataset is a cross-section data set, because it shows a snapshot in time for the year 2015. 
-
-
-
-
-
-
-```{r, include=FALSE}
-library(rio)
-ps2020 <- import ("fatal-police-shootings-data.csv")
-ps2020overview <- ps2020
-ps2020gender <- ps2020overview
-
+```{r}
+#viewing data set to determine cross sectional or not 
+summary(inequality_data)
 ```
 
-Exam Practice Numbers 
+
 ```{r}
-2+2
-#this is math 
+4. #subset Gini index for Sweden and Denmark
+subset(inequality_data, select = c("country", "inequality_gini"), country == "Sweden"|country == "Denmark")
 ```
 
-let us see how this prints 
+
 ```{r}
-for(r in 1:nrow(ps2020gender)){
-  if (ps2020gender$gender[r] == "M"){
-    ps2020gender$gender[r] = "Male"
-  } else if (ps2020gender$gender[r]=="F"){
-    ps2020gender$gender[r] = "Female"
-  } else if (ps2020gender$gender[r] == ''){
-    ps2020gender$gender[r] = "Other/Unknown"
-  }
+5. #subset gini index for Brazil
+subset(inequality_data, select = c("country", "inequality_gini"), country == "Brazil")
+```
+
+
+6. It is better to have a low inequality_gini score.
+
+
+```{r}
+7. #peak at dataframe
+head(inequality_data)
+```
+
+
+```{r}
+8.#create function
+remove.accents <- function(s){
+  #1 character substitutions
+  old1 <- "ú"
+  new1 <- "u"
+  s1  <-chartr(old1,new1, s)
+  
 }
 
-str(ps2020)
+#apply function
+inequality_data$country <- remove.accents(inequality_data$country)
+#checking if function worked
+head(inequality_data)
 ```
 
-printing to see how a for loop goes
-```{r, echo = FALSE, comment=""}
-mat <-matrix(data =seq(1, 10, by=1),
-             nrow = 5, ncol =2)
-print(mat)
 
-for(r in 1:nrow(mat)) # for r in 1:5
-  for(c in 1:ncol(mat))# for c in 1:2
-    print(paste("Row", r, "and column",c, "have values of", mat[r,c]))
-
+```{r}
+9. #sorting inequality_gini by lowest score
+inequality_data <- inequality_data[order(inequality_data$inequality_gini),]
+#the top 5
+head(inequality_data, 5)
 ```
+
+
+10. The mean inequality_gini is 36.81375
+```{r}
+#finding the average inequality_gini
+mean(inequality_data$inequality_gini, na.rm = TRUE)
+```
+
+
+
+
+
+
 
 ```{r, comment=""}
 2+2
