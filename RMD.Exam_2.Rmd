@@ -82,6 +82,97 @@ mean(inequality_data$inequality_gini, na.rm = TRUE)
 ```
 
 
+```{r}
+11. #creating a new variable 
+library(tidyverse)
+#low inequality
+inequality_data  <-
+  inequality_data %>%
+  mutate(low_inequality = 
+           ifelse( inequality_gini < 36.81375, 
+                  1, 0))
+#high inequality 
+inequality_data  <-
+  inequality_data %>%
+  mutate(high_inequality = 
+           ifelse( inequality_gini >= 36.81375, 
+                   1, 0))
+```
+
+
+```{r}
+12. #running a crosstab
+library(doBy)
+summaryBy(high_inequality ~ low_inequality, inequality_data, FUN = c(mean, length))
+```
+
+
+```{r}
+13. #created a vector with the names
+reduce_inequality_africa <- c("World Bank", "African Development Bank", "Bill and Melida Gates")
+#created for loop to print
+for (i in reduce_inequality_africa){
+  print(i)
+}
+```
+
+
+14. The percentage of females enrolled in primary education seems like a good indicator for inequality. If there is a low enrollment, there is likely to be more inequality 
+
+
+```{r}
+15.#load the WDI
+library(WDI)
+#importing data
+education_pupil <- WDI(country = "all",
+                  indicator =c ("SE.PRM.ENRL.FE.ZS"),
+                  start = 2015, end = 2015, extra = FALSE, cache = NULL)
+```
+
+
+```{r}
+16. #loading data.table
+library(data.table)
+#changing variable name
+setnames(female_edu, "SE.PRM.ENRL.FE.ZS", "female_enrollment")
+```
+
+
+```{r}
+17.#mergeing the data together 
+merged_df <- left_join(inequality_data, female_edu,
+                        by = c("iso2c", "year", "country"))
+```
+
+
+```{r}
+18.#removing NA based on ig
+merged_df <- na.omit(merged_df, 
+                     select <- "inequality_gini")
+#check if it worked
+any(is.na(merged_df))
+```
+
+
+```{r}
+19.#using filter and piping to select data
+#that is greater than 30
+#loading dplyr
+library(dplyr)
+data_greater_30 <-
+  merged_df %>%
+  dplyr::filter(inequality_gini > 30)
+```
+
+
+```{r}
+20.#find count of cournty with "ai"
+length(grep("ai", data_greater_30$country))
+```
+
+
+
+
 
 
 
@@ -93,18 +184,6 @@ mean(inequality_data$inequality_gini, na.rm = TRUE)
 # comment!
 ```
 
-
-Seeing How the Numbers Go
-```{r}
-#mean()
-#let us see
-```
-Just one comment
-```{r}
-#does this come up
-```
-
-## R Markdown
 
 This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
 

@@ -21,19 +21,87 @@ subset(inequality_data, select = c("country", "inequality_gini"), country == "Br
 #peak at dataframe
 head(inequality_data)
 
-#create function
+#create function for removing accents 
 remove.accents <- function(s){
   #1 character substitutions
   old1 <- "ú"
   new1 <- "u"
   s1  <-chartr(old1,new1, s)
   
-  #2 character substitutions 
-  old2 <- c("ß")
-  new2 <- c("ss")
-  s2 <- s1
-  for (i in seq_along(old2))
-    s2 <-gsub(old2[1], new2[i], s2, fixed = TRUE )
-  
-  s2
 }
+#apply function
+inequality_data$country <- remove.accents(inequality_data$country)
+#checking if function worked
+head(inequality_data)
+
+#sorting inequality_gini by lowest score
+inequality_data <- inequality_data[order(inequality_data$inequality_gini),]
+#the top 5
+head(inequality_data, 5)
+
+#finding the average inequality_gini
+mean(inequality_data$inequality_gini, na.rm = TRUE)
+
+
+#creating a new variable 
+library(tidyverse)
+#low inequality
+inequality_data  <-
+  inequality_data %>%
+  mutate(low_inequality = 
+           ifelse( inequality_gini < 36.81375, 
+                  1, 0))
+#high inequality 
+inequality_data  <-
+  inequality_data %>%
+  mutate(high_inequality = 
+           ifelse( inequality_gini >= 36.81375, 
+                   1, 0))
+
+#running a crosstab
+library(doBy)
+summaryBy(high_inequality ~ low_inequality, inequality_data, FUN = c(mean, length))
+
+#created a vector with the names
+reduce_inequality_africa <- c("World Bank", "African Development Bank", "Bill and Melida Gates")
+#created for loop to print
+for (i in reduce_inequality_africa){
+  print(i)
+}
+
+#load the WDI
+library(WDI)
+#importing data
+female_edu <- WDI(country = "all",
+                  indicator =c ("SE.PRM.ENRL.FE.ZS"),
+                  start = 2015, end = 2015, extra = FALSE, cache = NULL)
+
+#loading data.table
+library(data.table)
+#changing variable name
+setnames(female_edu, "SE.PRM.ENRL.FE.ZS", "female_enrollment")
+
+#mergeing the data together 
+merged_df <- left_join(inequality_data, female_edu,
+                        by = c("iso2c", "year", "country"))
+
+#removing NA based on ig
+merged_df <- na.omit(merged_df, 
+                     select <- "inequality_gini")
+#check if it worked
+any(is.na(merged_df))
+
+
+#using filter and piping to select data
+#that is greater than 30
+#loading dplyr
+library(dplyr)
+data_greater_30 <-
+  merged_df %>%
+  dplyr::filter(inequality_gini > 30)
+
+#find count of cournty with "ai"
+length(grep("ai", data_greater_30$country))
+
+
+
